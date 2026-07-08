@@ -1,40 +1,47 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Target, Users, Award, Lightbulb } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { getAbout, type AboutData } from "@/lib/api";
+import { getIcon } from "@/lib/icon-map";
+
+const FALLBACK: AboutData = {
+  id: 1,
+  page_title: "关于我们",
+  page_subtitle: "致力于为用户提供安全、稳定、高效的云虚拟环境解决方案",
+  heading: "公司简介",
+  intro_paragraph_1: "CloudNest 是一家专注于云端虚拟化技术的科技公司。",
+  intro_paragraph_2: "CloudNest 核心产品覆盖云手机、沙箱环境、应用分身三大领域。",
+  values: [
+    { icon: "Target", title: "使命", description: "让每个人都能拥有一台安全、稳定的云端设备" },
+    { icon: "Users", title: "团队", description: "资深云计算与安全专家团队" },
+    { icon: "Globe", title: "覆盖", description: "全球50+节点部署" },
+    { icon: "Shield", title: "信赖", description: "10,000+用户选择" },
+  ],
+};
 
 const About = () => {
-  const values = [
-    {
-      icon: Target,
-      title: "使命",
-      description: "AI驱动增长，科技点亮商机",
-    },
-    {
-      icon: Users,
-      title: "团队",
-      description: "智能化转型升级专家团，深耕AI与物联网领域",
-    },
-    {
-      icon: Award,
-      title: "方案",
-      description: "沉淀6大领域100+专业解决方案",
-    },
-    {
-      icon: Lightbulb,
-      title: "创新",
-      description: "持续技术创新解决方案，为客户注入业务增长核心动力",
-    },
-  ];
+  const [about, setAbout] = useState<AboutData | null>(null);
+
+  useEffect(() => {
+    getAbout().then((data) => {
+      // Server returns array; extract first item
+      const aboutData = Array.isArray(data) ? (data[0] || null) : data;
+      setAbout(aboutData);
+    }).catch(() => setAbout(FALLBACK));
+  }, []);
+
+  const a = about || FALLBACK;
 
   return (
     <div className="min-h-screen">
       <Navbar />
-      
+
       <section className="pt-32 pb-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/10" />
-        
+
         <div className="container mx-auto px-6 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -42,11 +49,21 @@ const About = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              关于<span className="gradient-text">我们</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/[0.08] text-primary text-sm font-semibold mb-5 border border-primary/[0.12] backdrop-blur-sm">
+              <Sparkles size={15} />
+              <span>关于我们</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-5 tracking-tight">
+              {a.page_title ? (
+                <>
+                  {a.page_title.substring(0, 2)}<span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">{a.page_title.substring(2)}</span>
+                </>
+              ) : (
+                <>关于<span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">我们</span></>
+              )}
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              先帮助一部分企业实现AI智能化升级
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto font-medium leading-relaxed">
+              {a.page_subtitle}
             </p>
           </motion.div>
 
@@ -56,40 +73,41 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="glass-card p-8 md:p-12 rounded-3xl mb-16"
           >
-            <h2 className="text-3xl font-bold mb-6 text-center">公司简介</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-              猫趴科技成立于2019年，总部位于中国深圳。我们是一家专注于人工智能、物联网和智能化系统集成的高精技术企业。
-              公司拥有一支由资深工程师和行业专家组成的技术团队，在AI算法、物联网架构、系统集成等领域积累了丰富的经验。
+            <h2 className="text-3xl font-bold mb-6 text-center tracking-tight">{a.heading}</h2>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-6 font-medium">
+              {a.intro_paragraph_1}
             </p>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              我们的核心业务覆盖智慧停车、智能门禁、智慧物业、行业视频管理等多个领域，我们为企业提供了专业的智能化解决方案，积累了6大领域的100+解决方案。
-              凭借先进的技术、可靠的产品和优质的服务，我们赢得了客户的广泛认可和信赖。
+            <p className="text-lg text-muted-foreground leading-relaxed font-medium">
+              {a.intro_paragraph_2}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-              >
-                <Card className="glass-card h-full group hover:glow-effect transition-all duration-300">
-                  <CardContent className="p-6 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full gradient-primary mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <value.icon size={32} className="text-primary-foreground" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
-                      {value.title}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {value.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            {(a.values || []).map((value, index) => {
+              const Icon = getIcon(value.icon);
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                >
+                  <Card className="glass-card h-full group hover:glow-effect transition-all duration-300">
+                    <CardContent className="p-6 text-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full gradient-primary mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <Icon size={32} className="text-primary-foreground" />
+                      </div>
+                      <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors tracking-tight">
+                        {value.title}
+                      </h3>
+                      <p className="text-muted-foreground font-medium text-sm md:text-base">
+                        {value.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Car, Brain, Lock, Building2, Radio, Video, Check } from "lucide-react";
+import { Car, Brain, Lock, Building2, Radio, Video, Check, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const SolutionsPage = () => {
@@ -90,10 +90,14 @@ const SolutionsPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              全方位<span className="gradient-text">解决方案</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/[0.08] text-primary text-sm font-semibold mb-5 border border-primary/[0.12] backdrop-blur-sm">
+              <Sparkles size={15} />
+              <span>核心优势</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-5 tracking-tight">
+              全方位<span className="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">解决方案</span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium">
               深度融合AI、物联网等前沿技术，为不同行业提供定制化智能解决方案
             </p>
           </motion.div>
@@ -107,21 +111,26 @@ const SolutionsPage = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="glass-card h-full group hover:glow-effect transition-all duration-300">
-                  <CardHeader>
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${solution.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <solution.icon size={28} className="text-white" />
+                <Card className="glass-card h-full group hover:glow-effect transition-all duration-300 overflow-hidden relative">
+                  {/* Top gradient bar */}
+                  <div className={`h-1.5 w-full bg-gradient-to-r ${solution.gradient}`} />
+                  <CardHeader className="p-6 pb-3">
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${solution.gradient} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+                      style={{ boxShadow: `0 8px 28px rgba(99,102,241,0.25)` }}>
+                      <solution.icon size={32} className="text-white" />
                     </div>
-                    <CardTitle className="text-2xl group-hover:text-primary transition-colors">
+                    <CardTitle className="text-2xl font-bold group-hover:text-primary transition-colors">
                       {solution.title}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="p-6 pt-2">
                     <ul className="space-y-3">
                       {solution.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start space-x-2">
-                          <Check size={20} className="text-primary mt-0.5 flex-shrink-0" />
-                          <span className="text-muted-foreground">{feature}</span>
+                        <li key={idx} className="flex items-start space-x-3">
+                          <div className={`shrink-0 w-5 h-5 rounded-md bg-gradient-to-br ${solution.gradient} flex items-center justify-center mt-0.5`}>
+                            <Check size={12} className="text-white" />
+                          </div>
+                          <span className="text-muted-foreground font-medium text-sm md:text-base">{feature}</span>
                         </li>
                       ))}
                     </ul>

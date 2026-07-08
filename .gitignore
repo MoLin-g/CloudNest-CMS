@@ -7,13 +7,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+
+# Build output
 dist
 dist-ssr
+
+# Env / secrets
 *.local
+.env
+.env.*
+!.env.example
+.dev.vars
 
 # Cloudflare Workers
-.dev.vars
 .wrangler
 
 # Editor directories and files
@@ -25,4 +33,34 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
-*.sw?
+
+# Database (SQLite)
+*.db
+*.db-shm
+*.db-wal
+server/data.db*
+
+# Backups
+backups/
+
+# Uploads (dev runtime)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Screenshots & scratch files
+screenshot-*
+*.png
+*.jpg
+!public/*.png
+!public/*.jpg
+test-report.html
+probe_*.cjs
+check-*.mjs
+phase*.mjs
+contact-check.png
+
+# Vite timestamp cache
+vite.config.ts.timestamp-*
+
+# WorkBuddy project data
+.workbuddy/
